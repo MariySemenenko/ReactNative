@@ -21,7 +21,7 @@ const initialState = {
 };
 
 export const RegistrationScreen = ({ navigation }) => {
-  const [showPassword, setShowPassword] = useState(true); //створюю стани
+  const [showPassword, setShowPassword] = useState(true); //створюю стани useState
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [state, setState] = useState(initialState);
   const [displayText, setDisplaytext] = useState("Показати");
