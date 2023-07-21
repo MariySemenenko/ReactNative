@@ -1,45 +1,48 @@
 import {
   StyleSheet,
-  KeyboardAvoidingView, // допомагає автоматично зміщувати вміст екрану, коли з'являється клавіатура
+  KeyboardAvoidingView, //вирівнює контент, щоб уникнути перекриття клавіатурою
   Text,
   View,
-  ImageBackground,
+  ImageBackground, //зображення фону
   Image,
   TextInput,
-  TouchableOpacity,
+  TouchableOpacity, //Показати/Приховати пароль
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 
-
 const initialState = {
+  //створюю стартовий стан
   login: "",
   email: "",
   password: "",
 };
 
 export const RegistrationScreen = ({ navigation }) => {
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(true); //створюю стани
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [state, setState] = useState(initialState);
   const [displayText, setDisplaytext] = useState("Показати");
 
   const keybordHide = () => {
+    //При натисканні кнопки "Зареєструватися"
     setIsShowKeybord(false);
-    Keyboard.dismiss();
-    console.log(state);
-    navigation.navigate("Home");
-    setState(initialState);
+    Keyboard.dismiss(); //закриваю клавіатуру
+    console.log(state); //виводю стейт в консоль
+    navigation.navigate("Home"); //переходю на екран Home
+    setState(initialState); //зберігаю початковий стан
   };
 
   useEffect(() => {
+    //для визначення тексту паролю
     setDisplaytext(showPassword ? "Показати" : "Приховати");
   }, [displayText, showPassword]);
 
   const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
+    // викликається при натисканні на кнопку Показати/Приховати пароль
+    setShowPassword(!showPassword); //і змінює значення кнопки
   };
 
   return (
@@ -64,18 +67,18 @@ export const RegistrationScreen = ({ navigation }) => {
               style={styles.input}
               placeholder={"Логін"}
               value={state.login}
-              onChangeText={(value) =>
-                setState((prevState) => ({ ...prevState, login: value }))
-              }
+              onChangeText={(
+                value //зберігаю в state та оновлюю стан тексту login
+              ) => setState((prevState) => ({ ...prevState, login: value }))}
               onFocus={() => setIsShowKeybord(true)}
             />
             <TextInput
               style={styles.input}
               placeholder={"Адреса електронної пошти"}
               value={state.email}
-              onChangeText={(value) =>
-                setState((prevState) => ({ ...prevState, email: value }))
-              }
+              onChangeText={(
+                value //зберігаю в state та оновлюю стан тексту email
+              ) => setState((prevState) => ({ ...prevState, email: value }))}
               onFocus={() => setIsShowKeybord(true)}
             />
 
@@ -84,7 +87,9 @@ export const RegistrationScreen = ({ navigation }) => {
                 style={styles.input}
                 placeholder={"Пароль"}
                 value={state.password}
-                onChangeText={(value) =>
+                onChangeText={(
+                  value //зберігаю в state та оновлюю стан тексту password
+                ) =>
                   setState((prevState) => ({ ...prevState, password: value }))
                 }
                 onFocus={() => setIsShowKeybord(true)}
@@ -148,7 +153,6 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: 30,
     marginTop: 20,
-    // fontFamily: "Inter-Black",
     lineHeight: 35,
   },
   btn: {
@@ -178,7 +182,6 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     fontSize: 16,
     textAlign: "center",
-    // fontFamily: "Inter-Black",
     lineHeight: 19,
   },
   passwordShow: {
@@ -186,6 +189,10 @@ const styles = StyleSheet.create({
     top: 15,
     right: 65,
     transform: [{ translateX: 50 }, { translateY: 17 }],
-    // fontFamily: "Inter-Black",
   },
 });
+
+//При натисканні кнопки "Зареєструватися" виконується функція keybordHide,
+// яка закриває клавіатуру, виводить поточний стан state і переходить на екран "Home".
+//Компонент має кнопку "Увійти", яка при натисканні переходить на екран "LoginScreen"
+// за допомогою navigation.navigate().
