@@ -1,7 +1,7 @@
 import {
   StyleSheet,
   KeyboardAvoidingView, //вирівнює контент, щоб уникнути перекриття клавіатурою
-  Text,
+   Text,
   View,
   ImageBackground, //зображення фону
   Image,
