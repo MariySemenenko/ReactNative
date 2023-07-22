@@ -2,17 +2,17 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
+  TouchableOpacity,////Показати/Приховати пароль
   StyleSheet,
   KeyboardAvoidingView,
   Keyboard,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback,//для обробки подій при натисканні де небудь на екрані onPress
   Platform,
   ImageBackground,
 } from "react-native";
 import React, { useState } from "react";
 
-const initialState = {
+const initialState = {//створюю стан
   email: "",
   password: "",
 };
@@ -21,11 +21,11 @@ export const LoginScreen = ({ navigation }) => {
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [state, setState] = useState(initialState);
 
-  const keybordHide = (e) => {
+  const keybordHide = (e) => {//виконується при натисканні Увійти
     setIsShowKeybord(false);
-    Keyboard.dismiss();
+    Keyboard.dismiss();//закриває клавіатуру
     console.log(state);
-    navigation.navigate("Home");
+    navigation.navigate("Home");//та переходю на Home за допомогою navigate
     setState(initialState);
   };
 
@@ -37,7 +37,7 @@ export const LoginScreen = ({ navigation }) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
           style={styles.containerKey}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}//поведінка вирівнювання контента на платформах
           keyboardVerticalOffset={Platform.OS === "ios" ? -230 : -235}
         >
           <View style={styles.containerForm}>
@@ -66,7 +66,7 @@ export const LoginScreen = ({ navigation }) => {
               <Text style={styles.textBtn}>Увійти</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("RegistrationScreen")}
+              onPress={() => navigation.navigate("RegistrationScreen")}//якщо не має реєстрації переходю на сторінку реєстрації
             >
               <Text style={styles.textLog}>Немає акаунту?</Text>
               <Text style={styles.textLogin}>Зареєструватися</Text>
