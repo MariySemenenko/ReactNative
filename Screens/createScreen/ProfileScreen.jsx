@@ -1,3 +1,4 @@
+//це екран профілю з інформацією та постами які створив користувач
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -5,15 +6,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  FlatList,
+  FlatList,//для відображення та для рендерингу кожного посту у списку
   ImageBackground,
 } from "react-native";
  import { Feather } from "@expo/vector-icons";
 
 export const ProfileScreen = ({ route, navigation }) => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);//створює стан posts, який буде зберігати список постів
 
-  useEffect(() => {
+  useEffect(() => {//для реакції на зміни в route.params
     if (route.params) {
       setPosts((prev) => [...prev, route.params]);
     }
@@ -22,11 +23,11 @@ export const ProfileScreen = ({ route, navigation }) => {
 
   return (
     <ImageBackground
-      source={require("../image/photoApp.png")}
+      source={require("../images/photo-bg.png")}
       style={styles.imageScreen}
     >
       <View style={styles.containerForm}>
-        <Image style={styles.image} source={require("../image/AddPhoto.png")} />
+        <Image style={styles.image} source={require("../images/add-photo.png")} />
       </View>
 
       <View style={styles.container}>
@@ -122,3 +123,10 @@ const styles = StyleSheet.create({
     top: -60,
   },
 });
+//У кожному елементі списку відображається зображення, назва посту, 
+//кількість коментарів та координати. Кнопки "Коментарі" та "Карта" 
+//дозволяють переходити на відповідні екрани з коментарями та картою, відповідно.
+
+//Поступово, коли компонент буде отримувати нові пости або оновлені дані, 
+//він буде перерендерювати і відображати їх на сторінці профілю згідно з 
+//установленими стилями.

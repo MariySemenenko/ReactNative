@@ -59,7 +59,7 @@ export const RegistrationScreen = ({ navigation }) => {
           <View style={styles.containerForm}>
             <Image
               style={styles.image}
-              source={require("./images/rectangle.png")}
+              source={require("./images/add-photo.png")}
             />
             <Text style={styles.text}>Реєстрація</Text>
 
