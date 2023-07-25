@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   namePost: {
     marginVertical: 8,
-    fontFamily: "Inter-Black",
+    // fontFamily: "Inter-Black",
   },
   infoThumb: {
     flexDirection: "row",

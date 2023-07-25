@@ -34,9 +34,9 @@ export const MapScreen = () => {
           latitude: "37,785834",
           latitudeDelta: 0.1,
           longitudeDelta: 0.1,
-          // ...location,
-          //   latitudeDelta: 0.0922,
-          //   longitudeDelta: 0.0421,
+           ...location,
+             latitudeDelta: 0.0922,
+             longitudeDelta: 0.0421,
         }}
         showsUserLocation={true}
       >

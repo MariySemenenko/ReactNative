@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  FlatList,//для відображення та для рендерингу кожного посту у списку
+  FlatList,
   ImageBackground,
 } from "react-native";
- import { Feather } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 export const ProfileScreen = ({ route, navigation }) => {
-  const [posts, setPosts] = useState([]);//створює стан posts, який буде зберігати список постів
+  const [posts, setPosts] = useState([]);
 
-  useEffect(() => {//для реакції на зміни в route.params
+  useEffect(() => {
     if (route.params) {
       setPosts((prev) => [...prev, route.params]);
     }
