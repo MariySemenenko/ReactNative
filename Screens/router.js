@@ -7,8 +7,6 @@ import { MapScreen } from "./createScreen/MapScreen";
 import { CommentsScreen } from "./createScreen/CommentsScreen";
 
 
-
-
 const MainStack = createStackNavigator();
 const HomeStack = createStackNavigator();
 const DefaultStack = createStackNavigator();
@@ -27,23 +25,19 @@ export const Router = (isAuth) => {
           name="Login"
           component={LoginScreen}
         />
-        <HomeStack.Screen
+       
+      </MainStack.Navigator>
+    );
+  }
+  return (
+    <HomeStack.Navigator>
+    <HomeStack.Screen
           options={{ headerShown: false }}
           name="Home"
           component={Home}
         />
-        <DefaultStack.Screen name="Карта" component={MapScreen} />
-        <DefaultStack.Screen name="Коментарі" component={CommentsScreen} />
-      </MainStack.Navigator>
-    );
-  }
-  // return (
-  //   <HomeStack.Navigator>
-  //     <HomeStack.Screen
-  //       options={{ headerShown: false }}
-  //       name="Home"
-  //       component={Home}
-  //     />
-  //   </HomeStack.Navigator>
-  // );
+        <HomeStack.Screen name="Map" component={MapScreen} />
+        <HomeStack.Screen name="Coment" component={CommentsScreen} />
+        </HomeStack.Navigator>
+  );
 };

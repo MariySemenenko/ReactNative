@@ -12,6 +12,8 @@ import {
   Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { registerDB } from "./Redax/auth/authOperations";
 
 const initialState = {
   //створюю стартовий стан
@@ -25,14 +27,20 @@ export const RegistrationScreen = ({ navigation }) => {
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [state, setState] = useState(initialState);
   const [displayText, setDisplaytext] = useState("Показати");
+  const dispatch = useDispatch();
+
+ 
+console.log(initialState)
 
   const keybordHide = () => {
+    dispatch(registerDB(initialState));
     //При натисканні кнопки "Зареєструватися"
     setIsShowKeybord(false);
     Keyboard.dismiss(); //закриваю клавіатуру
-    console.log(state); //виводю стейт в консоль
-    navigation.navigate("Home"); //переходю на екран Home
+    // console.log(state); //виводю стейт в консоль
+    // navigation.navigate("Home"); //переходю на екран Home
     setState(initialState); //зберігаю початковий стан
+
   };
 
   useEffect(() => {
@@ -106,7 +114,7 @@ export const RegistrationScreen = ({ navigation }) => {
               <Text style={styles.textBtn}>Зареєструватися</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("LoginScreen")}
+              onPress={() => navigation.navigate("Login")}
             >
               <Text style={styles.textLogin}>Вже є акаунт?</Text>
               <Text style={styles.textLogin}>Увійти</Text>

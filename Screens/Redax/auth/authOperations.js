@@ -5,7 +5,7 @@ import {
     updateProfile
 } from 'firebase/auth';
 import { auth } from "../../Redax/config"
-import { updateUser } from './sliseRegistration';
+import { updateUser, authStateChange } from './sliseRegistration';
 
 export const registerDB = ({ login, email, password }) => async (dispach) => {
 
@@ -23,10 +23,20 @@ export const registerDB = ({ login, email, password }) => async (dispach) => {
 // const registerDB = ({ email, password }) => 
 //         createUserWithEmailAndPassword(auth, email, password);
 
-const authStateChanged = async (onChange = () => {}) => {
-        onAuthStateChanged((user) => {
-                onChange(user);
-        });
+export const authStateChanged = () => async (dispatch, getState) => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const { uid, displayName, email } = auth.currentUser;
+      dispatch(
+        updateUser({
+          userId: uid,
+          login: displayName,
+          email
+        })
+      );
+      dispatch(authStateChange({ stateChange: true }));
+    }
+  });
 };
 
 export const loginDB = ({ email, password }) => async (dispach) => {

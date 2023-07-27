@@ -66,7 +66,7 @@ export const LoginScreen = ({ navigation }) => {
               <Text style={styles.textBtn}>Увійти</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => navigation.navigate("RegistrationScreen")}//якщо не має реєстрації переходю на сторінку реєстрації
+              onPress={() => navigation.navigate("Registration")}//якщо не має реєстрації переходю на сторінку реєстрації
             >
               <Text style={styles.textLog}>Немає акаунту?</Text>
               <Text style={styles.textLogin}>Зареєструватися</Text>
