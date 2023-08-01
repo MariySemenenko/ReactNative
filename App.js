@@ -7,8 +7,9 @@ import { Provider } from "react-redux";
 import { store } from "./Screens/Redax/store";
 import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
-
 import Main from "./Screens/Redax/main";
+
+
 
 export default function App() {
     const [fontsLoaded] = useFonts({

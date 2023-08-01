@@ -11,15 +11,53 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
+import { useSelector, useDispatch } from "react-redux";
+
+import { useAuth } from '../hooks/useAuth';
+import { authLogOut } from "../Redax/auth/authOperations";
+import { ImageUser } from "../images/ImageUser";
+
 export const ProfileScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
 
+  const { authState } = useAuth();
+
+  const dispatch = useDispatch();
+
+  const logOut = () => {
+    dispatch(authLogOut());
+  };
+
+  const { login, userId } = useSelector((state) => state.auth);
+
+
+const getDataFromFirestore = async () => {
+      const q = query(collection(db, "setPost"), where("userId", "==", userId));
+
+      onSnapshot(q, (data) => {
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      });
+ 
+  };
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prev) => [...prev, route.params]);
+    getDataFromFirestore();
+  }, []);
+
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const photoURL = await uploadAvatarToServer(result.assets[0].uri);
+
+      dispatch(removeUserAvatar(photoURL));
+    } else {
+      alert('You did not select any image.');
     }
-  }, [route.params]);
-  console.log("posts", posts);
+  };
 
   return (
     <ImageBackground
@@ -27,13 +65,24 @@ export const ProfileScreen = ({ route, navigation }) => {
       style={styles.imageScreen}
     >
       <View style={styles.containerForm}>
-        <Image style={styles.image} source={require("../images/add-photo.png")} />
+      <View style={styles.infoUserThumb}>
+        <View style={styles.containerUser}>
+            <ImageUser style={styles.image} state={authState} onPress={pickImageAsync} />
+            <Text style={{ fontFamily: 'Inter-Black', fontSize: 30, marginTop: 30}}>{login}</Text>
+            </View>
+            <TouchableOpacity
+              style={{ position: 'absolute', right: 0, marginTop: 22 }}
+              onPress={logOut}
+            >
+              <Feather name="log-out" size={24} color="#BDBDBD" />
+            </TouchableOpacity>
+          </View>
       </View>
 
       <View style={styles.container}>
         <FlatList
           data={posts}
-          keyExtractor={(item) => item.id}
+          
           renderItem={({
             item: {
               id,
@@ -48,6 +97,14 @@ export const ProfileScreen = ({ route, navigation }) => {
               <View style={styles.subContainer}>
                 <View style={styles.imageContainer}>
                   <Image source={{ uri: photo }} style={styles.image} />
+                  <Feather
+                   name="log-out" 
+                   size={24} 
+                   color="#BDBDBD" 
+                   onPress={logOut}
+                  //  style={{marginBottom: 100}}
+                  style={styles.logAut}
+                   />
                 </View>
                 <Text style={[{ ...styles.text, ...styles.namePost }]}>
                   {namePost}
@@ -55,7 +112,8 @@ export const ProfileScreen = ({ route, navigation }) => {
                 <View style={styles.infoThumb}>
                   <TouchableOpacity
                     style={styles.info}
-                    onPress={() => navigation.navigate("Коментарі")}
+                    onPress={() => navigation.navigate("Коментарі", 
+                  { postId: id, photo})}
                   >
                     <Feather
                       name="message-circle"
@@ -81,7 +139,11 @@ export const ProfileScreen = ({ route, navigation }) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.info}
-                    onPress={() => navigation.navigate("Карта")}
+                    onPress={() => navigation.navigate("Карта", {
+                      photo,
+                      namePost,
+                      location,
+                    })}
                   >
                     <Feather name="map-pin" size={24} color="#BDBDBD" />
                     <Text style={[{ ...styles.text, ...styles.locationText }]}>
@@ -92,6 +154,7 @@ export const ProfileScreen = ({ route, navigation }) => {
               </View>
             );
           }}
+          keyExtractor={(item) => item.id}
         />
       </View>
     </ImageBackground>
@@ -107,26 +170,21 @@ const styles = StyleSheet.create({
   containerForm: {
     flex: 1,
     top: 200,
-    paddingTop: 92,
-    paddingBottom: 78,
     paddingHorizontal: 16,
     borderTopStartRadius: 25,
     borderTopEndRadius: 25,
     backgroundColor: "#FFFFFF",
     alignItems: "center",
+    justifyContent: 'center',
   },
-  image: {
-    width: 132,
-    height: 120,
-    borderRadius: 16,
-    position: "absolute",
-    top: -60,
+  
+  infoUserThumb: {
+    flex: 1,
+    width: '100%',
+    alignItems: "center",
   },
+  containerUser: {
+    position: 'absolute',
+    transform: [{ translateX: 10 }, { translateY: -60 }], 
+  }
 });
-//У кожному елементі списку відображається зображення, назва посту, 
-//кількість коментарів та координати. Кнопки "Коментарі" та "Карта" 
-//дозволяють переходити на відповідні екрани з коментарями та картою, відповідно.
-
-//Поступово, коли компонент буде отримувати нові пости або оновлені дані, 
-//він буде перерендерювати і відображати їх на сторінці профілю згідно з 
-//установленими стилями.

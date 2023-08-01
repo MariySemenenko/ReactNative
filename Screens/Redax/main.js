@@ -9,7 +9,7 @@ import { useEffect } from "react";
 export default function Main() {
 
   const {stateChange} = useSelector((state) => state.auth);
-  console.log('stateChange', stateChange)
+  //console.log('stateChange', stateChange)
    const dispatch = useDispatch();
 
     useEffect(() => {
@@ -18,7 +18,7 @@ export default function Main() {
   
 
   const routing = Router(stateChange);
-
+ // const routing = Router()
   return (
 
     <NavigationContainer style={styles.container}>

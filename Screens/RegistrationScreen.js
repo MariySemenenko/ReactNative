@@ -12,46 +12,58 @@ import {
   Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerDB } from "./Redax/auth/authOperations";
+import { ImageUser } from "./images/ImageUser";
+import { useAuth } from "./hooks/useAuth";
 
 const initialState = {
-  //створюю стартовий стан
   login: "",
   email: "",
   password: "",
 };
 
 export const RegistrationScreen = ({ navigation }) => {
-  const [showPassword, setShowPassword] = useState(true); //створюю стани useState
+  const [showPassword, setShowPassword] = useState(true);
   const [isShowKeybord, setIsShowKeybord] = useState(false);
   const [state, setState] = useState(initialState);
   const [displayText, setDisplaytext] = useState("Показати");
-  const dispatch = useDispatch();
 
- 
-console.log(initialState)
+  const dispatch = useDispatch()
 
-  const keybordHide = () => {
-    dispatch(registerDB(initialState));
-    //При натисканні кнопки "Зареєструватися"
+  const keybordHide = (e) => {
+    e.preventDefault();
     setIsShowKeybord(false);
-    Keyboard.dismiss(); //закриваю клавіатуру
-    // console.log(state); //виводю стейт в консоль
-    // navigation.navigate("Home"); //переходю на екран Home
-    setState(initialState); //зберігаю початковий стан
-
+    Keyboard.dismiss();
+    dispatch(registerDB(state));
+    setState(initialState);
   };
 
   useEffect(() => {
-    //для визначення тексту паролю
     setDisplaytext(showPassword ? "Показати" : "Приховати");
   }, [displayText, showPassword]);
 
   const handleTogglePassword = () => {
-    // викликається при натисканні на кнопку Показати/Приховати пароль
-    setShowPassword(!showPassword); //і змінює значення кнопки
+    setShowPassword(!showPassword);
   };
+
+  // const { login, userId, photoURL } = useSelector((state) => state.auth);
+
+  const { authState } = useAuth();
+
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    })
+    if (!result.canceled) {
+      const photoURL = await uploadAvatarToServer(result.assets[0].uri);
+
+      dispatch(removeUserAvatar(photoURL));
+    } else {
+      alert('You did not select any image.');
+    }
+  }
 
   return (
     <ImageBackground
@@ -65,60 +77,71 @@ console.log(initialState)
           keyboardVerticalOffset={Platform.OS === "ios" ? -165 : -165}
         >
           <View style={styles.containerForm}>
-            <Image
+            {/* <Image
               style={styles.image}
-              source={require("./images/add-photo.png")}
-            />
+              source={require("./image/AddPhoto.png")}
+            /> */}
+            <View style={styles.infoUserThumb}>
+        <View style={styles.containerUser}>
+            <ImageUser style={styles.image} state={authState} onPress={pickImageAsync} />
+            {/* <Text style={{ fontFamily: 'Inter-Black', fontSize: 30, marginTop: 30}}>{login}</Text> */}
+            </View>
+          </View>
+      
             <Text style={styles.text}>Реєстрація</Text>
 
             <TextInput
               style={styles.input}
               placeholder={"Логін"}
               value={state.login}
-              onChangeText={(
-                value //зберігаю в state та оновлюю стан тексту login
-              ) => setState((prevState) => ({ ...prevState, login: value }))}
+              onChangeText={(value) =>
+                setState((prevState) => ({ ...prevState, login: value }))
+              }
               onFocus={() => setIsShowKeybord(true)}
             />
             <TextInput
               style={styles.input}
               placeholder={"Адреса електронної пошти"}
               value={state.email}
-              onChangeText={(
-                value //зберігаю в state та оновлюю стан тексту email
-              ) => setState((prevState) => ({ ...prevState, email: value }))}
+              onChangeText={(value) =>
+                setState((prevState) => ({ ...prevState, email: value }))
+              }
               onFocus={() => setIsShowKeybord(true)}
             />
-
-            <View>
-              <TextInput
-                style={styles.input}
-                placeholder={"Пароль"}
-                value={state.password}
-                onChangeText={(
-                  value //зберігаю в state та оновлюю стан тексту password
-                ) =>
-                  setState((prevState) => ({ ...prevState, password: value }))
-                }
-                onFocus={() => setIsShowKeybord(true)}
-                secureTextEntry={showPassword}
-              />
-              <TouchableOpacity
-                style={styles.passwordShow}
-                onPress={handleTogglePassword}
-              >
-                <Text>{displayText}</Text>
-              </TouchableOpacity>
+             
+             <View>
+            <TextInput
+              style={styles.input}
+              placeholder={"Пароль"}
+              value={state.password}
+              onChangeText={(value) =>
+                setState((prevState) => ({ ...prevState, password: value }))
+              }
+              onFocus={() => setIsShowKeybord(true)}
+              secureTextEntry={showPassword}
+            />
+            <TouchableOpacity
+              style={styles.passwordShow}
+              onPress={handleTogglePassword}>
+              <Text>{displayText}</Text>
+            </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.btn} onPress={keybordHide}>
+            <TouchableOpacity 
+            style={styles.btn} 
+            onPress={keybordHide}
+            >
               <Text style={styles.textBtn}>Зареєструватися</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Login")}
-            >
-              <Text style={styles.textLogin}>Вже є акаунт?</Text>
-              <Text style={styles.textLogin}>Увійти</Text>
-            </TouchableOpacity>
+            <Text style={styles.textLogin}>
+              Вже є акаунт?
+              <Text
+                style={styles.textLogin}
+                onPress={() => navigation.navigate("Login")}
+              >
+                {" "}
+                Увійти
+              </Text>
+            </Text>
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>

@@ -9,7 +9,7 @@ import { CommentsScreen } from "./createScreen/CommentsScreen";
 
 const MainStack = createStackNavigator();
 const HomeStack = createStackNavigator();
-const DefaultStack = createStackNavigator();
+//const DefaultStack = createStackNavigator();
 
 export const Router = (isAuth) => {
   if (!isAuth) {

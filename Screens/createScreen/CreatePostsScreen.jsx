@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+
 import React, { useState, useEffect } from "react";
 import { Camera } from "expo-camera";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
@@ -17,7 +18,8 @@ import * as Location from "expo-location";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { useSelector } from "react-redux";
-//import { db } from "../../config";
+import { db } from "../Redax/config";
+import { collection, addDoc  } from "firebase/firestore";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [camera, setCamera] = useState(null);
@@ -33,6 +35,8 @@ export const CreatePostsScreen = ({ navigation }) => {
   const createSetPost = async () => {
 // Add a new document with a generated id.
 await addDoc(collection(db, "setPost"), {
+  userId,
+  login,
   photo,
   location,
    namePost,
@@ -239,20 +243,20 @@ const styles = StyleSheet.create({
   buttonTitle: {
     textAlign: "center",
     fontSize: 16,
-    // fontFamily: "Inter-Black",
+    fontFamily: "Inter-Black",
     lineHeight: 19,
     color: "#BDBDBD",
   },
   activeButtonTitle: {
     textAlign: "center",
     fontSize: 16,
-    // fontFamily: "Inter-Black",
+    fontFamily: "Inter-Black",
     lineHeight: 19,
     color: "#FFFFFF",
   },
   text: {
     marginTop: 8,
-    // fontFamily: "Inter-Black",
+    fontFamily: "Inter-Black",
     fontSize: 16,
     color: "#BDBDBD",
   },
